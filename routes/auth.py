@@ -7,9 +7,17 @@ auth_bp = Blueprint("auth", __name__)
 @auth_bp.route("/register", methods=["POST"])
 def register():
     data = request.get_json()
-    print("收到資料：", data)  # 可在 Render Logs 查看
+    print("收到資料：", data)
+
     try:
-        if not all(k in data for k in ("first_name", "last_name", "email", "password")):
+        # 顯示每個欄位實際值（找出是誰是 None）
+        print("first_name:", data.get("first_name"))
+        print("last_name:", data.get("last_name"))
+        print("email:", data.get("email"))
+        print("password:", data.get("password"))
+
+        # 檢查是否有缺欄位
+        if not all([data.get("first_name"), data.get("last_name"), data.get("email"), data.get("password")]):
             return jsonify({"message": "Missing fields"}), 400
 
         if User.query.filter_by(email=data["email"]).first():
@@ -25,9 +33,11 @@ def register():
         db.session.commit()
 
         return jsonify({"message": "User registered successfully"}), 201
+
     except Exception as e:
         print("⚠️ 發生錯誤：", e)
         return jsonify({"message": "Server error"}), 500
+
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
