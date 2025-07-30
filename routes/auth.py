@@ -1,53 +1,39 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from models import User
 from database import db
 
-auth_bp = Blueprint("auth", __name__)
+def register_auth_routes(app):
+    @app.route("/register", methods=["POST"])
+    def register():
+        data = request.get_json()
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
+        email = data.get("email")
+        password = data.get("password")
 
-@auth_bp.route("/register", methods=["POST"])
-def register():
-    data = request.get_json()
-    print("收到資料：", data)
-
-    try:
-        # 顯示每個欄位實際值（找出是誰是 None）
-        print("first_name:", data.get("first_name"))
-        print("last_name:", data.get("last_name"))
-        print("email:", data.get("email"))
-        print("password:", data.get("password"))
-
-        # 檢查是否有缺欄位
-        if not all([data.get("first_name"), data.get("last_name"), data.get("email"), data.get("password")]):
-            return jsonify({"message": "Missing fields"}), 400
-
-        if User.query.filter_by(email=data["email"]).first():
+        if User.query.filter_by(email=email).first():
             return jsonify({"message": "Email already exists"}), 400
 
-        user = User(
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            email=data["email"]
+        new_user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
         )
-        user.set_password(data["password"])
-        db.session.add(user)
+        new_user.set_password(password)
+        db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({"message": "User registered successfully"}), 201
+        return jsonify({"message": "Registration successful"}), 200
 
-    except Exception as e:
-        print("⚠️ 發生錯誤：", e)
-        return jsonify({"message": "Server error"}), 500
+    @app.route("/login", methods=["POST"])
+    def login():
+        data = request.get_json()
+        email = data.get("email")
+        password = data.get("password")
 
+        user = User.query.filter_by(email=email).first()
 
-@auth_bp.route("/login", methods=["POST"])
-def login():
-    data = request.json
-    user = User.query.filter_by(email=data["email"]).first()
-    if user and user.check_password(data["password"]):
-        return jsonify({
-            "message": "Login successful",
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": user.email
-        }), 200
-    return jsonify({"message": "Invalid credentials"}), 401
+        if user and user.check_password(password):
+            return jsonify({"message": "Login successful"}), 200
+        else:
+            return jsonify({"message": "Invalid email or password"}), 401

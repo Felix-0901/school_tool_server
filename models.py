@@ -13,3 +13,12 @@ class User(db.Model):
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(120), nullable=False)
+    task_name = db.Column(db.String(255), nullable=False)
+    time = db.Column(db.String(50), nullable=False)  # 年月日時分
+    location = db.Column(db.String(255))
+    note = db.Column(db.Text)

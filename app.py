@@ -4,6 +4,8 @@ from database import init_db
 from routes import register_routes
 import os
 from dotenv import load_dotenv
+from models import Task
+from database import db
 
 load_dotenv()
 

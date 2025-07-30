@@ -1,4 +1,10 @@
-from .auth import auth_bp
+from .auth import register_auth_routes
+from .task import register_task_routes
 
 def register_routes(app):
-    app.register_blueprint(auth_bp)
+    register_auth_routes(app)
+ 
+
+def register_routes(app):
+    register_auth_routes(app)
+    register_task_routes(app)
