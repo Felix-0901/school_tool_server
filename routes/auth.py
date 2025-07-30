@@ -34,6 +34,9 @@ def register_auth_routes(app):
         user = User.query.filter_by(email=email).first()
 
         if user and user.check_password(password):
-            return jsonify({"message": "Login successful"}), 200
+            return jsonify({
+                "message": "Login successful",
+                "email": user.email  # ✅ 回傳 email 給前端
+            }), 200
         else:
             return jsonify({"message": "Invalid email or password"}), 401
