@@ -22,3 +22,14 @@ class Task(db.Model):
     time = db.Column(db.String(50), nullable=False)  # 年月日時分
     location = db.Column(db.String(255))
     note = db.Column(db.Text)
+
+class Diary(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_email = db.Column(db.String(120), nullable=False)
+    title = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.String(10), nullable=False)  # 格式 YYYY-MM-DD
+    content = db.Column(db.Text)
+
+    def __repr__(self):
+        return f"<Diary {self.user_email} {self.date} {self.title}>"
+
