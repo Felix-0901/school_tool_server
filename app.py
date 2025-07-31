@@ -16,11 +16,11 @@ CORS(app)
 # 初始化資料庫設定
 init_db(app)
 
-# 在 app context 底下 create 所有 table（含新加的 todos、notes）
+# 在 app context 底下 create 所有 table（含新加的 todos、notes、timer_records、users、etc.）
 with app.app_context():
     db.create_all()
 
-# 註冊所有路由（auth, task, diary, timer_record, study）
+# 註冊所有路由（包含 auth、task、diary、timer_record、study、user）
 register_routes(app)
 
 if __name__ == "__main__":
