@@ -7,6 +7,7 @@ from .timer_record import timer_bp
 from .study_routes import study_bp
 from .user_routes import user_bp
 from .announcement_routes import announcement_bp
+from .profile_routes import profile_bp
 
 def register_routes(app):
     # 原本的各個 Blueprint
@@ -20,3 +21,4 @@ def register_routes(app):
     # 註冊 User 頁面的 Blueprint
     app.register_blueprint(user_bp)
     app.register_blueprint(announcement_bp)
+    app.register_blueprint(profile_bp)
