@@ -7,4 +7,5 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: DATABASE_URL
+        value: "postgres://<NEON_USER>:<NEON_PASS>@<NEON_HOST>:<NEON_PORT>/school_tool_db?sslmode=require"
         sync: false
